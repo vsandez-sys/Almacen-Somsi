@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - SOMSI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-split-page">
+    
+    <a href="/index.html" class="btn btn-light shadow-sm rounded-circle position-fixed d-flex align-items-center justify-content-center" 
+   style="top: 20px; left: 20px; width: 45px; height: 45px; z-index: 1050; border: 1px solid #eee;">
+    <i class="bi bi-arrow-left fs-4 text-primary"></i>
+</a>
+
+    <div class="split-container">
+        <div class="split-left industrial-wallpaper">
+            <div class="overlay-content p-5 text-white">
+               
+                <div class="title-container mt-auto">
+                    <h1 class="display-3 fw-bold login-title">SOMSI<br><span class="text-primary-light">REFACCIONES</span></h1>
+                    <p class="lead text-muted-light mt-3 fs-5">Refacciones a un click.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="split-right bg-white p-5">
+            <div class="login-form-container m-auto shadow-lg p-4 rounded-4 bg-white border">
+                <div class="form-header text-center mb-4">
+                    <h5 class="fw-bold text-muted text-uppercase mb-1" style="letter-spacing: 1.5px;">ADMIN LOGIN</h5>
+                    <small class="text-muted">Accede al panel de administración</small>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-floating mb-3">
+                        <input type="text" id="loginUser" class="form-control" placeholder="Usuario" required>
+                        <label for="loginUser"><i class="bi bi-person-fill me-2 text-muted"></i>Usuario</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" id="loginPass" class="form-control" placeholder="Contraseña" required>
+                        <label for="loginPass"><i class="bi bi-lock-fill me-2 text-muted"></i>Contraseña</label>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <small><a href="#" class="text-decoration-none text-muted">¿Olvidó su contraseña?</a></small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm rounded-pill py-3">
+                        <i class="bi bi-person-circle me-2 h5 mb-0"></i>INGRESAR
+                    </button>
+                </form>
+            </div>
+
+          
+        </div>
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/database.js"></script>
+    <script type="module" src="js/login.js"></script>
+</body>
+</html>

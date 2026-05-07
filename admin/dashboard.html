@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - SOMSI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary mb-4 shadow">
+        <div class="container">
+            <span class="navbar-brand fw-bold">ADMINISTRACIÓN | Almacén SOMSI</span>
+            <button id="btnLogout" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-dark text-white fw-bold">Registro / Edición / Clonación</div>
+                    <div class="card-body">
+                        <form id="formAlta">
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Número Económico</label>
+                                <input type="text" id="adminNumEcon" class="form-control" placeholder="Ej: RETRO-01" required>
+                                <div id="msgAviso" class="form-text text-primary" style="display:none;">¡Datos recuperados!</div>
+                            </div>
+                            
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Modelo</label>
+                                    <input type="text" id="adminModelo" class="form-control">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Serie</label>
+                                    <input type="text" id="adminSerie" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Categoría</label>
+                                <input list="listaCategorias" id="adminCategoria" class="form-control" required>
+                                <datalist id="listaCategorias"></datalist>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Subcategoría</label>
+                                <input type="text" id="adminSubcat" class="form-control" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label small fw-bold">Nombre de la Pieza</label>
+                                <input type="text" id="adminPieza" class="form-control" required>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-7">
+                                    <label class="form-label small fw-bold">N° de Parte</label>
+                                    <input type="text" id="adminParte" class="form-control" required>
+                                </div>
+                                <div class="col-5">
+                                    <label class="form-label small fw-bold">Cant.</label>
+                                    <input type="number" id="adminCant" class="form-control" value="1" min="1" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnGuardar" class="btn btn-success w-100 fw-bold shadow-sm">GUARDAR EN CATÁLOGO</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                        <span class="fw-bold text-uppercase">Manual de Partes Registradas</span>
+                        <div class="input-group input-group-sm" style="width: 280px;">
+                            <span class="input-group-text bg-primary text-white"><i class="bi bi-filter"></i></span>
+                            <input type="text" id="filtroEcon" class="form-control" placeholder="Filtrar por Económico...">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light small text-uppercase">
+                                <tr>
+                                    <th>Unidad</th>
+                                    <th>Categoría / Sub</th>
+                                    <th>Pieza</th>
+                                    <th>N° Parte</th>
+                                    <th class="text-center">Cant.</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAdmin" class="small"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>
