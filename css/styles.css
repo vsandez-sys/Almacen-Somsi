@@ -128,7 +128,7 @@ code {
 
 /* LADO IZQUIERDO: Fondo Industrial (image_0.png) */
 .industrial-wallpaper {
-    background-image: url('/assets/Carrusel/Somsi\ 1.jpg'); /* Imagen genérica de almacén limpio */
+    background-image: url('/assets/Carrusel/Somsi1.jpg'); /* Imagen genérica de almacén limpio */
     background-size: cover;
     background-position: center;
     width: 40%;
