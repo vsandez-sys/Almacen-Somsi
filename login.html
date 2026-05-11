@@ -10,57 +10,89 @@
 </head>
 <body class="login-split-page">
     
-    <a href="index.html" class="btn btn-light shadow-sm rounded-circle position-fixed d-flex align-items-center justify-content-center" 
-   style="top: 20px; left: 20px; width: 45px; height: 45px; z-index: 1050; border: 1px solid #eee;">
-    <i class="bi bi-arrow-left fs-4 text-primary"></i>
-</a>
+
 
     <div class="split-container">
-        <div class="split-left industrial-wallpaper">
-            <div class="overlay-content p-5 text-white">
-               
-                <div class="title-container mt-auto">
-                    <h1 class="display-3 fw-bold login-title">SOMSI<br><span class="text-primary-light">REFACCIONES</span></h1>
-                    <p class="lead text-muted-light mt-3 fs-5">Refacciones a un click.</p>
+        <div class="split-left">
+            <video id="videoLogin" autoplay muted loop playsinline class="video-background">
+                <source src="https://raw.githubusercontent.com/vsandez-sys/Almacen-Somsi/main/assets/Video%20Project%201.mp4" type="video/mp4">
+            </video>
+            
+            <div id="glassContent" class="video-overlay-glass">
+                <div class="overlay-content text-center text-white">
+                    <h1 class="display-1 fw-bold login-title mb-0">SOMSI</h1>
+                    <div class="linea-decorativa-lg my-3"></div>
+                    <p class="h3 fw-light">Refacciones y Servicios</p>
+                    <p class="small text-uppercase ls-2 opacity-75">Panel de Gestión Industrial</p>
                 </div>
             </div>
         </div>
 
-        <div class="split-right bg-white p-5">
-            <div class="login-form-container m-auto shadow-lg p-4 rounded-4 bg-white border">
-                <div class="form-header text-center mb-4">
-                    <h5 class="fw-bold text-muted text-uppercase mb-1" style="letter-spacing: 1.5px;">ADMIN LOGIN</h5>
-                    <small class="text-muted">Accede al panel de administración</small>
-                </div>
+        <div class="split-right bg-white">
+            <div class="login-column-content p-4 p-md-5">
                 
-                <form id="loginForm">
-                    <div class="form-floating mb-3">
-                        <input type="text" id="loginUser" class="form-control" placeholder="Usuario" required>
-                        <label for="loginUser"><i class="bi bi-person-fill me-2 text-muted"></i>Usuario</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" id="loginPass" class="form-control" placeholder="Contraseña" required>
-                        <label for="loginPass"><i class="bi bi-lock-fill me-2 text-muted"></i>Contraseña</label>
+                <div class="login-form-container mb-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-shield-lock-fill display-4 text-primary"></i>
+                        <h2 class="fw-bold mt-2">Acceso Administrativo</h2>
                     </div>
                     
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <small><a href="#" class="text-decoration-none text-muted">¿Olvidó su contraseña?</a></small>
+                    <form id="loginForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" id="loginUser" class="form-control" placeholder="Usuario" required>
+                            <label for="loginUser">Usuario / Email</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="password" id="loginPass" class="form-control" placeholder="Contraseña" required>
+                            <label for="loginPass">Contraseña</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow rounded-pill py-3">
+                            INGRESAR
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tools-container border-top pt-4">
+                    <p class="text-muted small fw-bold text-uppercase text-center mb-3">Enlaces Rápidos</p>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <a href="https://vsandez-sys.github.io/Almacen-Somsi/" target="_blank" class="text-decoration-none">
+                                <div class="card h-100 border-0 shadow-sm hover-card bg-light">
+                                    <div class="card-body text-center p-2">
+                                        <i class="bi bi-search text-success d-block mb-1 fs-4"></i>
+                                        <span class="x-small-text fw-bold text-dark">BUSCADOR</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="https://vsandez-sys.github.io/cotizador-somsi/" target="_blank" class="text-decoration-none">
+                                <div class="card h-100 border-0 shadow-sm hover-card bg-light">
+                                    <div class="card-body text-center p-2">
+                                        <i class="bi bi-calculator text-primary d-block mb-1 fs-4"></i>
+                                        <span class="x-small-text fw-bold text-dark">COTIZAR</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="https://vsandez-sys.github.io/Salida-Refacciones/" target="_blank" class="text-decoration-none">
+                                <div class="card h-100 border-0 shadow-sm hover-card bg-light">
+                                    <div class="card-body text-center p-2">
+                                        <i class="bi bi-box-arrow-right text-danger d-block mb-1 fs-4"></i>
+                                        <span class="x-small-text fw-bold text-dark">VALES</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm rounded-pill py-3">
-                        <i class="bi bi-person-circle me-2 h5 mb-0"></i>INGRESAR
-                    </button>
-                </form>
             </div>
-
-          
         </div>
     </div>
 
-    
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="js/database.js"></script>
     <script type="module" src="js/login.js"></script>
 </body>
 </html>

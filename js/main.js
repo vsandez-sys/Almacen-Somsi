@@ -38,24 +38,59 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
 
     if (snap.empty) { alert("Sin resultados."); return; }
 
-    let resultados = [];
-    snap.forEach(d => resultados.push(d.data()));
-    resultados.sort((a, b) => a.subcategoria.localeCompare(b.subcategoria) || a.pieza.localeCompare(b.pieza));
+    let crudos = [];
+    snap.forEach(d => crudos.push(d.data()));
 
-    document.getElementById('txtBusqueda').innerText = resultados[0].numEcon;
-    document.getElementById('txtModelo').innerText = resultados[0].modelo || "-";
-    document.getElementById('txtSerie').innerText = resultados[0].serie || "-";
+    // --- LÓGICA DE AGRUPACIÓN ---
+    // 1. Separamos originales de conversiones
+    let principales = crudos.filter(item => !item.refOriginal);
+    let conversiones = crudos.filter(item => item.refOriginal);
 
-    tabla.innerHTML = "";
-    resultados.forEach(d => {
-        const color = obtenerColorPorTexto(d.subcategoria);
-        tabla.innerHTML += `
-            <tr>
-                <td><span class="badge" style="background-color:${color}">${d.subcategoria}</span></td>
-                <td class="fw-bold">${d.pieza}</td>
-                <td><code>${d.numParte}</code></td>
-                <td class="text-center"><span class="badge rounded-pill bg-dark px-3">${d.cantidad}</span></td>
-            </tr>`;
+    // 2. Si una conversión no encuentra a su "padre" en los resultados, la tratamos como principal
+    conversiones.forEach(conv => {
+        const padreExiste = principales.some(p => p.numParte === conv.refOriginal);
+        if (!padreExiste) principales.push(conv);
     });
+
+    // Ordenar principales
+    principales.sort((a, b) => a.subcategoria.localeCompare(b.subcategoria) || a.pieza.localeCompare(b.pieza));
+
+    // Renderizar
+    tabla.innerHTML = "";
+    principales.forEach((p, index) => {
+        const color = obtenerColorPorTexto(p.subcategoria);
+        const misConversiones = conversiones.filter(c => c.refOriginal === p.numParte);
+        const hasConvs = misConversiones.length > 0;
+        const idCollapse = `coll${index}`;
+
+        // Fila Principal
+        tabla.innerHTML += `
+            <tr class="${hasConvs ? 'table-light' : ''}" style="${hasConvs ? 'cursor:pointer' : ''}" 
+                ${hasConvs ? `data-bs-toggle="collapse" data-bs-target=".${idCollapse}"` : ''}>
+                <td><span class="badge" style="background-color:${color}">${p.subcategoria}</span></td>
+                <td class="fw-bold">
+                    ${p.pieza}
+                    ${hasConvs ? `<i class="bi bi-chevron-down ms-2 text-primary small"></i>` : ''}
+                </td>
+                <td><code>${p.numParte}</code></td>
+                <td class="text-center"><span class="badge rounded-pill bg-dark px-3">${p.cantidad}</span></td>
+            </tr>`;
+
+        // Filas de Conversiones (Ocultas)
+        misConversiones.forEach(c => {
+            tabla.innerHTML += `
+                <tr class="collapse ${idCollapse} bg-white shadow-sm">
+                    <td class="ps-4 text-muted small italic"><i class="bi bi-arrow-return-right me-2"></i>Conversión</td>
+                    <td class="text-muted small">${c.pieza} (Cross Reference)</td>
+                    <td><code class="text-primary">${c.numParte}</code></td>
+                    <td class="text-center"><span class="badge rounded-pill bg-secondary px-3">${c.cantidad}</span></td>
+                </tr>`;
+        });
+    });
+
+    // Actualizar encabezados
+    document.getElementById('txtBusqueda').innerText = crudos[0].numEcon;
+    document.getElementById('txtModelo').innerText = crudos[0].modelo || "-";
+    document.getElementById('txtSerie').innerText = crudos[0].serie || "-";
     document.getElementById('resultadosBusqueda').classList.remove('d-none');
 });
