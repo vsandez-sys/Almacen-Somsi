@@ -226,3 +226,79 @@ code {
     .split-container { flex-direction: column; }
     .split-left, .split-right { width: 100%; height: 50vh; }
 }
+
+/* Realce de fila */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05) !important;
+    transition: background-color 0.2s ease;
+}
+
+/* Badge estilizado (Glassmorphism ligero) */
+.badge-custom {
+    border: 1px solid rgba(0,0,0,0.1);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Botón de limpiar buscador */
+.search-container {
+    position: relative;
+}
+.btn-clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #ccc;
+    display: none; /* Se activa con JS */
+}
+.btn-clear-search:hover { color: #dc3545; }
+
+/* --- ESTILOS DEL BUSCADOR --- */
+.search-container {
+    position: relative;
+}
+
+.btn-clear-search {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #ccc;
+    display: none; /* Se activa vía JS al escribir */
+    z-index: 10;
+    transition: color 0.2s;
+}
+
+.btn-clear-search:hover {
+    color: #dc3545;
+}
+
+/* --- ESTILOS DEL SKELETON DE CARGA --- */
+.skeleton {
+    width: 100%;
+    height: 1.2rem;
+    margin: 5px 0;
+    background: #eff1f3;
+    background-image: linear-gradient(90deg, #eff1f3 0px, #e2e5e7 60px, #eff1f3 120px);
+    background-size: 600px;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    display: inline-block;
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: -450px 0; }
+    100% { background-position: 450px 0; }
+}
+
+/* --- EFECTO HOVER EN TABLA --- */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.03) !important;
+}
