@@ -5,6 +5,13 @@ import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, l
 let editId = null;
 let ordenAscendente = true;
 
+// Referencias a los inputs del formulario
+const inputEcon = document.getElementById('adminNumEcon');
+const inputModelo = document.getElementById('adminModelo');
+const inputSerie = document.getElementById('adminSerie');
+const filtroInput = document.getElementById('filtroEcon');
+const btnClear = document.getElementById('btnClearSearch');
+
 // --- CONTROL DE SESIÓN ---
 onAuthStateChanged(auth, (user) => {
     if (!user) window.location.replace("../login.html");
@@ -13,23 +20,51 @@ onAuthStateChanged(auth, (user) => {
 
 document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
-// --- FUNCIÓN DE CARGA PRINCIPAL (CON SKELETON) ---
+// --- AUTOCOMPLETADO INTELIGENTE (CON LIMPIEZA) ---
+if (inputEcon) {
+    inputEcon.addEventListener('blur', async () => {
+        const valorEcon = inputEcon.value.toUpperCase().trim();
+        
+        // 1. Siempre limpiamos primero para evitar "arrastrar" datos viejos
+        if (!editId) { // Solo limpiamos automáticamente si NO estamos editando
+            inputModelo.value = "";
+            inputSerie.value = "";
+        }
+
+        if (valorEcon.length === 0 || editId) return;
+
+        try {
+            // Buscamos si el económico ya existe para copiar su Modelo y Serie
+            const q = query(collection(db, "refacciones"), where("numEcon", "==", valorEcon), limit(1));
+            const snap = await getDocs(q);
+
+            if (!snap.empty) {
+                const datos = snap.docs[0].data();
+                inputModelo.value = datos.modelo || "";
+                inputSerie.value = datos.serie || "";
+                
+                // Feedback visual de éxito
+                inputModelo.classList.add('is-valid');
+                inputSerie.classList.add('is-valid');
+                setTimeout(() => {
+                    inputModelo.classList.remove('is-valid');
+                    inputSerie.classList.remove('is-valid');
+                }, 1500);
+            }
+        } catch (e) {
+            console.error("Error en autocompletado:", e);
+        }
+    });
+}
+
+// --- CARGAR TABLA (SKELETON + ORDENAMIENTO + FILTRO) ---
 async function cargarInventario(filtro = "") {
     const tabla = document.getElementById('tablaAdmin');
     if (!tabla) return;
 
-    // 1. Mostrar Skeletons mientras carga
     tabla.innerHTML = ""; 
     for (let i = 0; i < 5; i++) {
-        tabla.innerHTML += `
-            <tr>
-                <td><div class="skeleton" style="width: 70%"></div></td>
-                <td><div class="skeleton" style="width: 80%"></div></td>
-                <td><div class="skeleton" style="width: 90%"></div></td>
-                <td><div class="skeleton" style="width: 60%"></div></td>
-                <td><div class="skeleton" style="width: 40%"></div></td>
-                <td><div class="skeleton" style="width: 50%"></div></td>
-            </tr>`;
+        tabla.innerHTML += `<tr><td colspan="6"><div class="skeleton"></div></td></tr>`;
     }
 
     try {
@@ -38,24 +73,20 @@ async function cargarInventario(filtro = "") {
         
         snap.forEach(d => {
             const item = d.data();
-            // Filtrado por Número Económico (Unidad)
             if (filtro === "" || item.numEcon.toUpperCase().includes(filtro.toUpperCase())) {
                 datos.push({ id: d.id, ...item });
             }
         });
 
-        // Ordenamiento
         datos.sort((a, b) => {
             const econA = a.numEcon.toUpperCase();
             const econB = b.numEcon.toUpperCase();
             return ordenAscendente ? econA.localeCompare(econB) : econB.localeCompare(econA);
         });
 
-        // 2. Renderizar Datos Reales
         tabla.innerHTML = ""; 
-
         if (datos.length === 0) {
-            tabla.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-muted">No hay coincidencias</td></tr>`;
+            tabla.innerHTML = `<tr><td colspan="6" class="text-center p-4">Sin resultados</td></tr>`;
             return;
         }
 
@@ -67,51 +98,35 @@ async function cargarInventario(filtro = "") {
             
             tabla.innerHTML += `
                 <tr class="align-middle">
+                    <td><span class="fw-bold text-primary fs-5">${item.numEcon}</span><br><small>${item.modelo}</small></td>
                     <td>
-                        <span class="fw-bold text-primary fs-5">${item.numEcon}</span><br>
-                        <small class="text-muted fw-bold">${item.modelo}</small>
+                        <div class="small text-muted fw-bold">${item.categoria}</div>
+                        <span class="badge" style="background-color:${colorSub}">${item.subcategoria}</span>
                     </td>
-                    <td>
-                        <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.6rem; letter-spacing: 1px;">${item.categoria}</div>
-                        <span class="badge shadow-sm" style="background-color:${colorSub}">${item.subcategoria}</span>
-                    </td>
-                    <td>
-                        <span class="fw-bold d-block">${item.pieza}</span>
-                        ${ref ? `<small class="text-primary italic">Conv. de ${ref}</small>` : ''}
-                    </td>
+                    <td><span class="fw-bold">${item.pieza}</span><br>${ref ? `<small class="text-primary italic">Ref: ${ref}</small>` : ''}</td>
                     <td><code class="text-dark fw-bold">${item.numParte}</code></td>
-                    <td class="text-center">
-                        <span class="fw-bold fs-5 text-secondary">${item.cantidad}</span>
-                    </td>
-                    <td class="text-end px-3">
-                        <div class="btn-group border rounded bg-white shadow-sm">
+                    <td class="text-center"><span class="fw-bold fs-5 text-secondary">${item.cantidad}</span></td>
+                    <td class="text-end">
+                        <div class="btn-group border rounded shadow-sm bg-white">
                             <button class="btn btn-sm btn-white" onclick="prepararEdicion('${item.id}', ${params})"><i class="bi bi-pencil-square text-warning"></i></button>
                             <button class="btn btn-sm btn-white" onclick="eliminarItem('${item.id}')"><i class="bi bi-trash3-fill text-danger"></i></button>
                         </div>
                     </td>
                 </tr>`;
         });
-    } catch (e) { 
-        console.error("Error al cargar:", e);
-        tabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error de conexión</td></tr>`;
-    }
+    } catch (e) { console.error(e); }
 }
 
-// --- GESTIÓN DEL FILTRO Y BÚSQUEDA ---
-const filtroInput = document.getElementById('filtroEcon');
-const btnClear = document.getElementById('btnClearSearch');
+// --- FUNCIONES GLOBALES (CONECTADAS AL HTML) ---
 
 if (filtroInput) {
     filtroInput.addEventListener('input', (e) => {
         const val = e.target.value;
-        // Mostrar/ocultar botón X
         if (btnClear) btnClear.style.display = val.length > 0 ? 'block' : 'none';
-        // Filtrar tabla
         cargarInventario(val);
     });
 }
 
-// HACER FUNCIONES GLOBALES (Para que el HTML las vea)
 window.limpiarBusqueda = () => {
     if (filtroInput) {
         filtroInput.value = "";
@@ -125,14 +140,10 @@ window.alternarOrden = () => {
     ordenAscendente = !ordenAscendente;
     const icono = document.getElementById('iconOrden');
     if (icono) icono.className = ordenAscendente ? "bi bi-sort-alpha-down" : "bi bi-sort-alpha-up";
-    cargarInventario(filtroInput ? filtroInput.value : "");
+    cargarInventario(filtroInput.value);
 };
 
-// --- RESTO DE FUNCIONES (Guardar, Editar, Eliminar) ---
-
-const inputEcon = document.getElementById('adminNumEcon');
-const inputModelo = document.getElementById('adminModelo');
-const inputSerie = document.getElementById('adminSerie');
+// --- CRUD: GUARDAR / EDITAR / ELIMINAR ---
 
 document.getElementById('formAlta').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -185,5 +196,5 @@ function obtenerColorPorTexto(texto) {
     let hash = 0;
     const str = String(texto);
     for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    return `hsl(${Math.abs(hash) % 360}, 60%, 40%)`;
+    return `hsl(${Math.abs(hash) % 360}, 65%, 40%)`;
 }
