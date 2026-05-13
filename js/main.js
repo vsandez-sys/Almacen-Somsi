@@ -1,96 +1,119 @@
 import { db } from './database.js';
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-function obtenerColorPorTexto(texto) {
-    let hash = 0;
-    for (let i = 0; i < texto.length; i++) hash = texto.charCodeAt(i) + ((hash << 5) - hash);
-    const h = hash % 360;
-    return `hsl(${h}, 70%, 40%)`; 
+// --- 1. UTILIDADES ---
+window.generarColorSuave = (t) => {
+    if (!t) return '#f8f9fa';
+    let h = 0; for (let i = 0; i < t.length; i++) h = t.charCodeAt(i) + ((h << 5) - h);
+    return `hsl(${Math.abs(h % 360)}, 60%, 94%)`;
+};
+window.generarColorTexto = (t) => {
+    if (!t) return '#333';
+    let h = 0; for (let i = 0; i < t.length; i++) h = t.charCodeAt(i) + ((h << 5) - h);
+    return `hsl(${Math.abs(h % 360)}, 70%, 25%)`;
+};
+window.toggleConv = (id) => document.getElementById(`conv-${id}`)?.classList.toggle('d-none');
+
+// --- 2. CARGAR CATEGORÍAS REALES ---
+async function inicializarCategorias() {
+    const select = document.getElementById('selectCategoria');
+    try {
+        const querySnapshot = await getDocs(collection(db, "refacciones"));
+        const categoriasSet = new Set();
+        
+        querySnapshot.forEach(doc => {
+            const cat = doc.data().categoria; // JALAMOS EL CAMPO CATEGORIA
+            if (cat) categoriasSet.add(cat.trim());
+        });
+
+        const lista = Array.from(categoriasSet).sort();
+        select.innerHTML = '<option value="">Todas las Categorías</option>';
+        lista.forEach(c => {
+            select.innerHTML += `<option value="${c}">${c.toUpperCase()}</option>`;
+        });
+    } catch (e) {
+        console.error("Error al cargar categorías", e);
+    }
 }
 
-async function inicializarBuscador() {
-    const snap = await getDocs(collection(db, "refacciones"));
-    const cats = new Set();
-    const econs = new Set();
-    
-    snap.forEach(d => {
-        cats.add(d.data().categoria);
-        econs.add(d.data().numEcon);
-    });
+// --- 3. PROCESO DE BÚSQUEDA ---
+async function ejecutarBusqueda() {
+    const texto = document.getElementById('filtroEcon').value.toUpperCase().trim();
+    const catSeleccionada = document.getElementById('selectCategoria').value;
+    const tabla = document.getElementById('tablaResultados');
+    const seccion = document.getElementById('resultadosSeccion');
 
-    const select = document.getElementById('categoria');
-    select.innerHTML = '<option value="" disabled selected>Seleccione Categoría...</option>';
-    [...cats].sort().forEach(c => select.innerHTML += `<option value="${c}">${c}</option>`);
+    if (!texto && !catSeleccionada) {
+        seccion.style.display = 'none';
+        return;
+    }
 
-    const dl = document.getElementById('listaEcons');
-    econs.forEach(e => dl.innerHTML += `<option value="${e}">`);
-}
-inicializarBuscador();
+    seccion.style.display = 'block';
+    tabla.innerHTML = '<tr><td colspan="4" class="text-center p-5"><div class="spinner-border text-primary"></div></td></tr>';
 
-document.getElementById('searchForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const econ = document.getElementById('numEcon').value.toUpperCase().trim();
-    const cat = document.getElementById('categoria').value;
-    const tabla = document.getElementById('tablaCuerpo');
+    try {
+        const snap = await getDocs(collection(db, "refacciones"));
+        let resultados = [];
 
-    const q = query(collection(db, "refacciones"), where("numEcon", "==", econ), where("categoria", "==", cat));
-    const snap = await getDocs(q);
+        snap.forEach(doc => {
+            const d = doc.data();
+            const partes = Array.isArray(d.partes) ? d.partes : [];
+            
+            const coincideTexto = !texto || 
+                (d.numEcon || "").toUpperCase().includes(texto) || 
+                (d.pieza || "").toUpperCase().includes(texto) ||
+                partes.some(p => String(p).toUpperCase().includes(texto));
 
-    if (snap.empty) { alert("Sin resultados."); return; }
+            const coincideCat = !catSeleccionada || (d.categoria || "") === catSeleccionada;
 
-    let crudos = [];
-    snap.forEach(d => crudos.push(d.data()));
+            if (coincideTexto && coincideCat) {
+                resultados.push({ id: doc.id, ...d });
+            }
+        });
 
-    // --- LÓGICA DE AGRUPACIÓN ---
-    // 1. Separamos originales de conversiones
-    let principales = crudos.filter(item => !item.refOriginal);
-    let conversiones = crudos.filter(item => item.refOriginal);
+        if (resultados.length === 0) {
+            tabla.innerHTML = '<tr><td colspan="4" class="text-center p-5 text-muted">No se encontraron piezas.</td></tr>';
+            return;
+        }
 
-    // 2. Si una conversión no encuentra a su "padre" en los resultados, la tratamos como principal
-    conversiones.forEach(conv => {
-        const padreExiste = principales.some(p => p.numParte === conv.refOriginal);
-        if (!padreExiste) principales.push(conv);
-    });
+        tabla.innerHTML = "";
+        resultados.sort((a,b) => (a.numEcon || "").localeCompare(b.numEcon || ""));
 
-    // Ordenar principales
-    principales.sort((a, b) => a.subcategoria.localeCompare(b.subcategoria) || a.pieza.localeCompare(b.pieza));
+        resultados.forEach(item => {
+            const p = Array.isArray(item.partes) ? item.partes : [];
+            const principal = p[0] || "S/N";
+            const resto = p.slice(1);
 
-    // Renderizar
-    tabla.innerHTML = "";
-    principales.forEach((p, index) => {
-        const color = obtenerColorPorTexto(p.subcategoria);
-        const misConversiones = conversiones.filter(c => c.refOriginal === p.numParte);
-        const hasConvs = misConversiones.length > 0;
-        const idCollapse = `coll${index}`;
-
-        // Fila Principal
-        tabla.innerHTML += `
-            <tr class="${hasConvs ? 'table-light' : ''}" style="${hasConvs ? 'cursor:pointer' : ''}" 
-                ${hasConvs ? `data-bs-toggle="collapse" data-bs-target=".${idCollapse}"` : ''}>
-                <td><span class="badge" style="background-color:${color}">${p.subcategoria}</span></td>
-                <td class="fw-bold">
-                    ${p.pieza}
-                    ${hasConvs ? `<i class="bi bi-chevron-down ms-2 text-primary small"></i>` : ''}
-                </td>
-                <td><code>${p.numParte}</code></td>
-                <td class="text-center"><span class="badge rounded-pill bg-dark px-3">${p.cantidad}</span></td>
-            </tr>`;
-
-        // Filas de Conversiones (Ocultas)
-        misConversiones.forEach(c => {
             tabla.innerHTML += `
-                <tr class="collapse ${idCollapse} bg-white shadow-sm">
-                    <td class="ps-4 text-muted small italic"><i class="bi bi-arrow-return-right me-2"></i>Conversión</td>
-                    <td class="text-muted small">${c.pieza} (Cross Reference)</td>
-                    <td><code class="text-primary">${c.numParte}</code></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-secondary px-3">${c.cantidad}</span></td>
+                <tr class="align-middle">
+                    <td>
+                        <span class="badge" style="background-color: ${window.generarColorSuave(item.subcategoria)}; color: ${window.generarColorTexto(item.subcategoria)}">
+                            ${item.subcategoria || 'GENERAL'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark">${item.pieza}</div>
+                        <div class="text-muted small">Equipo: <b>${item.numEcon}</b></div>
+                        ${resto.length > 0 ? `
+                            <button class="btn btn-sm p-0 text-success fw-bold mt-1" onclick="window.toggleConv('${item.id}')">+ Equivalencias</button>
+                            <div id="conv-${item.id}" class="d-none bg-light p-2 rounded border mt-1 small">
+                                ${resto.map(c => `<div>• ${c}</div>`).join('')}
+                            </div>
+                        ` : ''}
+                    </td>
+                    <td><code class="text-clark-verde bg-dark px-2 py-1 rounded">${principal}</code></td>
+                    <td class="text-center"><span class="badge bg-dark rounded-pill px-3">${item.cantidad}</span></td>
                 </tr>`;
         });
-    });
+    } catch (e) {
+        tabla.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error al consultar datos.</td></tr>';
+    }
+}
 
-    // Actualizar encabezados
-    document.getElementById('txtBusqueda').innerText = crudos[0].numEcon;
-    document.getElementById('txtModelo').innerText = crudos[0].modelo || "-";
-    document.getElementById('txtSerie').innerText = crudos[0].serie || "-";
-    document.getElementById('resultadosBusqueda').classList.remove('d-none');
+// --- 4. LISTENERS ---
+document.addEventListener('DOMContentLoaded', () => {
+    inicializarCategorias();
+    document.getElementById('btnBuscar').addEventListener('click', ejecutarBusqueda);
+    document.getElementById('selectCategoria').addEventListener('change', ejecutarBusqueda);
+    document.getElementById('filtroEcon').addEventListener('keypress', (e) => { if(e.key === 'Enter') ejecutarBusqueda(); });
 });

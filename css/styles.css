@@ -1,304 +1,341 @@
-/* FUENTE Y GENERALES */
+/* --- PALETA DE COLORES CLARK ---
+   Verde Principal: #A1D332
+   Gris Oscuro: #2D2D2D
+   Gris Fondo: #F2F2F2
+   Blanco: #FFFFFF
+---------------------------------- */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #fff6e7;
-    color: #1b1b1b;
+    background-color: #F2F2F2;
+    /* Gris muy claro industrial */
+    color: #2D2D2D;
+    /* Gris carbón para mejor legibilidad */
 }
 
+/* --- NAVBAR Y TEXTOS --- */
 .ls-2 {
     letter-spacing: 2px;
 }
 
-/* CARRUSEL HERO */
+.text-primary {
+    color: #A1D332 !important;
+    /* Verde Clark */
+}
+
+/* --- CARRUSEL HERO --- */
 .hero-img {
     height: 450px;
     object-fit: cover;
-    filter: brightness(0.6);
+    filter: brightness(0.5) grayscale(0.2);
+    /* Look más serio e industrial */
 }
 
-/* BUSCADOR CONTAINER */
-.buscador-container {
-    margin-top: -80px;
-    /* Sube el buscador sobre el carrusel un poco */
-    position: relative;
-    z-index: 10;
-}
-
-/* TARJETAS DE CATEGORÍA */
-.category-card {
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    cursor: pointer;
-    border-radius: 20px;
-}
-
-.category-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.175) !important;
-    background-color: #fff6e7;
-}
-
-.category-card i {
-    transition: transform 0.3s ease;
-}
-
-.category-card:hover i {
-    transform: scale(1.1);
-}
-
-/* TABLAS Y BADGES */
-.table thead th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    border: none;
-}
-
-.badge {
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-}
-
-code {
-    background: #fff6e7;
-    padding: 4px 8px;
-    border-radius: 6px;
-    color: #344322;
-    font-weight: 700;
-    font-size: 0.95rem;
-    border: 1px solid #fff6e7;
-}
-
-/* ANIMACIONES */
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .hero-img {
-        height: 300px;
-    }
-
-    .buscador-container {
-        margin-top: -40px;
-    }
-
-    .border-md-end {
-        border-right: none !important;
-    }
-}
-
-/* Asegura que el Navbar esté siempre arriba de todo */
-.navbar {
-    position: relative;
-    z-index: 1050;
-    /* Valor superior al del carrusel de Bootstrap */
-    width: 100%;
-}
-
-/* Ajuste del Carrusel para que no empuje el contenido hacia arriba */
-#heroCarousel {
-    position: relative;
-    z-index: 1;
-    /* Capa base */
-    margin-top: 0;
-    /* Eliminamos márgenes negativos si los habías puesto */
-}
-
-/* Opcional: Si quieres que el buscador "flote" un poco pero sin tapar el Navbar */
+/* --- BUSCADOR Y CONTENEDORES --- */
 .buscador-container {
     margin-top: -50px;
     position: relative;
     z-index: 10;
 }
 
-.hero-img {
-    height: 450px;
-    object-fit: cover;
+/* --- TARJETAS DE CATEGORÍA --- */
+.category-card {
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    cursor: pointer;
+    border-radius: 12px;
+    /* Menos redondeado para verse más técnico */
+    border-bottom: 4px solid transparent;
 }
 
-/* FUENTE Y GENERALES */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    background-color: #FFFFFF;
+    border-bottom: 4px solid #A1D332;
+    /* Subrayado verde al pasar el mouse */
+}
 
+.category-card i {
+    color: #A1D332;
+    /* Iconos en verde Clark */
+    transition: transform 0.3s ease;
+}
 
+/* --- TABLAS Y CATÁLOGO (DISEÑO TÉCNICO) --- */
+.table {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-/* --- SPLIT SCREEN CONFIG --- */
+.table thead th {
+    background-color: #2D2D2D;
+    /* Cabecera oscura profesional */
+    color: #FFFFFF;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 15px;
+    border: none;
+}
+
+/* Realce de fila con el verde Clark muy sutil */
+.table-hover tbody tr:hover {
+    background-color: rgba(161, 211, 50, 0.08) !important;
+    transition: background-color 0.2s ease;
+}
+
+/* --- BADGES Y CÓDIGOS --- */
+.badge {
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}
+
+/* Badge personalizado con colores Clark */
+.badge-custom {
+    background-color: #A1D332;
+    color: #2D2D2D;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo para los códigos OEM (Referencias) */
+code {
+    background: #2D2D2D;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: #A1D332;
+    /* Texto verde sobre fondo oscuro */
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Monaco', 'Consolas', monospace;
+}
+
+/* --- BOTONES --- */
+.btn-primary {
+    background-color: #A1D332 !important;
+    border-color: #A1D332 !important;
+    color: #2D2D2D !important;
+    font-weight: 700;
+}
+
+.btn-primary:hover {
+    background-color: #8cb82b !important;
+    border-color: #8cb82b !important;
+}
+
+/* --- LOGIN / SPLIT SCREEN --- */
+.linea-decorativa-lg {
+    width: 60px;
+    height: 6px;
+    background-color: #A1D332;
+    /* Línea verde Clark */
+    border-radius: 3px;
+}
+
+.split-left {
+    background-color: #2D2D2D;
+}
+
+.video-overlay-glass {
+    background: rgba(45, 45, 45, 0.4);
+    /* Overlay oscuro */
+    backdrop-filter: blur(8px);
+}
+
+/* --- SKELETON --- */
+.skeleton {
+    background: #e0e0e0;
+    background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 60px, #e0e0e0 120px);
+}
+
+/* Ajuste de scrollbar para combinar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F2F2F2;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #A1D332;
+    border-radius: 10px;
+}
+
+/* --- SPLIT SCREEN REPARADO (50/50) --- */
 .split-container {
     display: flex;
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
 }
 
-/* LADO IZQUIERDO */
+/* LADO IZQUIERDO (Video/Imagen) */
 .split-left {
-    width: 85%;
+    width: 50%;
+    /* Regresamos al 50% */
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #000;
+    background-color: #2D2D2D;
+    /* Gris Carbón Clark */
 }
 
 .video-background {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; /* Llena el 50% sin dejar huecos */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     z-index: 1;
 }
 
 .video-overlay-glass {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(45, 45, 45, 0.5);
+    /* Overlay oscuro industrial */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.8s ease, visibility 0.8s ease; /* Transición suave */
 }
 
-/* Clase para ocultar el cristal y texto */
-.hide-content {
-    opacity: 0 !important;
-    visibility: hidden !important;
-}
-
-.overlay-content {
-    position: relative;
-    z-index: 3;
-}
-
-/* LADO DERECHO */
+/* LADO DERECHO (Formulario) */
 .split-right {
     width: 50%;
+    /* Regresamos al 50% */
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #FFFFFF;
+    padding: 2rem;
 }
 
 .login-column-content {
-    max-width: 450px;
+    max-width: 400px;
     width: 100%;
 }
 
+/* Ajuste para Móviles */
+@media (max-width: 992px) {
+    .split-container {
+        flex-direction: column;
+    }
+
+    .split-left {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .split-right {
+        width: 100%;
+        height: 60vh;
+    }
+}
+
+/* --- DETALLES DE COLOR CLARK PARA EL LOGIN --- */
 .linea-decorativa-lg {
-    width: 80px;
+    width: 60px;
     height: 5px;
-    background-color: #0d6efd;
+    background-color: #A1D332;
+    /* Verde Clark */
     border-radius: 10px;
     display: inline-block;
+    margin-bottom: 1.5rem;
 }
 
-.hover-card {
+.btn-login {
+    background-color: #A1D332 !important;
+    border: none;
+    color: #2D2D2D !important;
+    font-weight: 800;
+    padding: 12px;
     transition: all 0.3s ease;
 }
-.hover-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+
+.btn-login:hover {
+    background-color: #8cb82b !important;
+    transform: translateY(-2px);
 }
 
-.x-small-text { font-size: 0.65rem; }
+/* --- UNIFICACIÓN DE COLORES CORPORATIVOS (ADIÓS AL AZUL) --- */
 
-@media (max-width: 992px) {
-    .split-container { flex-direction: column; }
-    .split-left, .split-right { width: 100%; height: 50vh; }
+/* 1. Cambiar el color de los enlaces y textos "primary" */
+.text-primary,
+a,
+.nav-link.active {
+    color: #A1D332 !important;
+    /* Verde Clark */
 }
 
-/* Realce de fila */
+/* 2. Botones del buscador y del sitio */
+.btn-primary {
+    background-color: #A1D332 !important;
+    border-color: #A1D332 !important;
+    color: #2D2D2D !important;
+    /* Texto oscuro para contraste */
+    font-weight: 700;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #8cb82b !important;
+    border-color: #8cb82b !important;
+    box-shadow: 0 0 0 0.25 rgba(161, 211, 50, 0.25) !important;
+}
+
+/* 3. Inputs del buscador cuando están seleccionados (foco) */
+.form-control:focus {
+    border-color: #A1D332 !important;
+    box-shadow: 0 0 0 0.25rem rgba(161, 211, 50, 0.25) !important;
+}
+
+/* 4. Iconos en las tarjetas de categoría */
+.category-card i {
+    color: #A1D332 !important;
+}
+
+/* 5. La línea decorativa del buscador o login */
+.linea-decorativa-lg {
+    background-color: #A1D332 !important;
+}
+
+/* 6. Badges y etiquetas */
+.bg-primary {
+    background-color: #A1D332 !important;
+    color: #2D2D2D !important;
+}
+
+/* 7. Hover en las filas de la tabla del buscador */
 .table-hover tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.05) !important;
-    transition: background-color 0.2s ease;
+    background-color: rgba(161, 211, 50, 0.1) !important;
 }
 
-/* Badge estilizado (Glassmorphism ligero) */
-.badge-custom {
-    border: 1px solid rgba(0,0,0,0.1);
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* 8. Estilo de los códigos OEM en el buscador */
+code {
+    background-color: #2D2D2D !important;
+    color: #A1D332 !important;
+    border: 1px solid #1b1b1b;
 }
 
-/* Botón de limpiar buscador */
-.search-container {
-    position: relative;
-}
-.btn-clear-search {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    color: #ccc;
-    display: none; /* Se activa con JS */
-}
-.btn-clear-search:hover { color: #dc3545; }
-
-/* --- ESTILOS DEL BUSCADOR --- */
-.search-container {
-    position: relative;
-}
-
-.btn-clear-search {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    color: #ccc;
-    display: none; /* Se activa vía JS al escribir */
-    z-index: 10;
-    transition: color 0.2s;
-}
-
-.btn-clear-search:hover {
-    color: #dc3545;
-}
-
-/* --- ESTILOS DEL SKELETON DE CARGA --- */
-.skeleton {
-    width: 100%;
-    height: 1.2rem;
-    margin: 5px 0;
-    background: #eff1f3;
-    background-image: linear-gradient(90deg, #eff1f3 0px, #e2e5e7 60px, #eff1f3 120px);
-    background-size: 600px;
-    background-repeat: no-repeat;
-    border-radius: 4px;
-    display: inline-block;
-    animation: shimmer 1.5s infinite linear;
-}
-
-@keyframes shimmer {
-    0% { background-position: -450px 0; }
-    100% { background-position: 450px 0; }
-}
-
-/* --- EFECTO HOVER EN TABLA --- */
-.table-hover tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.03) !important;
+/* 9. Navbar (si usas bg-primary en el HTML) */
+.navbar.bg-primary {
+    background-color: #2D2D2D !important;
+    /* Navbar oscuro para que resalte el logo */
+    border-bottom: 3px solid #A1D332;
 }

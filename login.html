@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="login-split-page">
-    
+
 
 
     <div class="split-container">
         <div class="split-left">
             <video id="videoLogin" autoplay muted loop playsinline class="video-background">
-                <source src="https://raw.githubusercontent.com/vsandez-sys/Almacen-Somsi/main/assets/Video%20Project%201.mp4" type="video/mp4">
+                <source
+                    src="https://raw.githubusercontent.com/vsandez-sys/Almacen-Somsi/main/assets/Video%20Project%201.mp4"
+                    type="video/mp4">
             </video>
-            
+
             <div id="glassContent" class="video-overlay-glass">
                 <div class="overlay-content text-center text-white">
                     <h1 class="display-1 fw-bold login-title mb-0">SOMSI</h1>
@@ -30,20 +34,21 @@
 
         <div class="split-right bg-white">
             <div class="login-column-content p-4 p-md-5">
-                
+
                 <div class="login-form-container mb-5">
                     <div class="text-center mb-4">
                         <i class="bi bi-shield-lock-fill display-4 text-primary"></i>
                         <h2 class="fw-bold mt-2">Acceso Administrativo</h2>
                     </div>
-                    
+
                     <form id="loginForm">
                         <div class="form-floating mb-3">
                             <input type="text" id="loginUser" class="form-control" placeholder="Usuario" required>
                             <label for="loginUser">Usuario / Email</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" id="loginPass" class="form-control" placeholder="Contraseña" required>
+                            <input type="password" id="loginPass" class="form-control" placeholder="Contraseña"
+                                required>
                             <label for="loginPass">Contraseña</label>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow rounded-pill py-3">
@@ -56,7 +61,8 @@
                     <p class="text-muted small fw-bold text-uppercase text-center mb-3">Enlaces Rápidos</p>
                     <div class="row g-2">
                         <div class="col-4">
-                            <a href="https://vsandez-sys.github.io/Almacen-Somsi/" target="_blank" class="text-decoration-none">
+                            <a href="https://vsandez-sys.github.io/Almacen-Somsi/" target="_blank"
+                                class="text-decoration-none">
                                 <div class="card h-100 border-0 shadow-sm hover-card bg-light">
                                     <div class="card-body text-center p-2">
                                         <i class="bi bi-search text-success d-block mb-1 fs-4"></i>
@@ -66,7 +72,8 @@
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="https://vsandez-sys.github.io/cotizador-somsi/" target="_blank" class="text-decoration-none">
+                            <a href="https://vsandez-sys.github.io/cotizador-somsi/" target="_blank"
+                                class="text-decoration-none">
                                 <div class="card h-100 border-0 shadow-sm hover-card bg-light">
                                     <div class="card-body text-center p-2">
                                         <i class="bi bi-calculator text-primary d-block mb-1 fs-4"></i>
@@ -76,7 +83,8 @@
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="https://vsandez-sys.github.io/Salida-Refacciones/" target="_blank" class="text-decoration-none">
+                            <a href="https://vsandez-sys.github.io/Salida-Refacciones/" target="_blank"
+                                class="text-decoration-none">
                                 <div class="card h-100 border-0 shadow-sm hover-card bg-light">
                                     <div class="card-body text-center p-2">
                                         <i class="bi bi-box-arrow-right text-danger d-block mb-1 fs-4"></i>
@@ -95,4 +103,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="js/login.js"></script>
 </body>
+
 </html>
