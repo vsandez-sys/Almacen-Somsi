@@ -339,3 +339,43 @@ code {
     /* Navbar oscuro para que resalte el logo */
     border-bottom: 3px solid #A1D332;
 }
+
+.custom-carousel-img {
+    height: 500px;
+    /* Ajusta esta altura a tu gusto (ej. 400px, 600px) */
+    object-fit: cover;
+    /* Esto evita que la imagen se deforme */
+    width: 100%;
+}
+
+/* Altura fija para las imágenes */
+.custom-carousel-img {
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Estilo para el campo oscuro del texto */
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.9);
+    /* Fondo negro con 90% de opacidad */
+    padding: 20px;
+    border-radius: 10px;
+    /* Bordes redondeados para un look moderno */
+    max-width: 70%;
+    /* Evita que el fondo toque los bordes laterales */
+    left: 15%;
+    /* Centra el contenedor debido al max-width */
+    bottom: 35px;
+    /* Sube un poco el texto desde el borde inferior */
+}
+
+/* Ajuste para que el texto sea siempre blanco */
+.carousel-caption h1 {
+    color: #ffffff;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.605);
+    /* Sombra suave a las letras */
+}
+

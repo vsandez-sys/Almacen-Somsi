@@ -314,3 +314,29 @@ document.getElementById('formCopiaMasiva').addEventListener('submit', async (e) 
     bootstrap.Modal.getInstance(document.getElementById('modalCopiaMasiva')).hide();
     cargarInventario(); e.target.reset();
 });
+
+// Función para Edición Global de Nombres de Categoría/Subcategoría
+document.getElementById('formEdicionGlobal')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const categoriaVieja = document.getElementById('catVieja').value.trim();
+    const categoriaNueva = document.getElementById('catNueva').value.trim();
+
+    if(!confirm(`¿Seguro que quieres cambiar "${categoriaVieja}" por "${categoriaNueva}" en TODAS las refacciones?`)) return;
+
+    try {
+        const q = query(collection(db, "refacciones"), where("pieza", "==", categoriaVieja));
+        const snap = await getDocs(q);
+        const batch = writeBatch(db);
+
+        snap.forEach(d => {
+            batch.update(d.ref, { pieza: categoriaNueva });
+        });
+
+        await batch.commit();
+        alert("¡Cambio global aplicado con éxito!");
+        location.reload();
+    } catch (error) {
+        console.error(error);
+        alert("Error al realizar el cambio global.");
+    }
+});
